@@ -4,6 +4,8 @@
 #include<set>
 #include<string>
 #include<map>
+#include<stack>
+#include<queue>
 #include<algorithm>
 
 #define mod 1000000007
@@ -35,26 +37,55 @@
 using namespace std;
 typedef long long int lli;
 
-int ar[2001];
-vector<vector<int> > T(2001,vector<int>(2001,-1));
-int func(int st,int en,int age)
-{
-	if(st > en)
-		return 0;
-	if(T[st][en] != -1)
-		return T[st][en];
-	return T[st][en]= max(func(st+1,en,age+1)+ar[st]*age , func(st,en-1,age+1)+ar[en]*age);
-}
+
 int main()
 {
 	//ios_base::sync_with_stdio(false); cin.tie(0); 
-	int n;
-	cin >> n;
-	lpi(i,1,n)
+	//cout << "hello";
+	int ar[3],n;
+	ar[0] = 1;
+	cin >> ar[1] >> ar[2] >> n;
+	sort(ar,ar+3);
+	int q[n];
+	lpi(i,0,n-1)
 	{
-		cin >> ar[i];
+		cin >> q[i];
 	}
-	int ans = func(1,n,1);
-	cout << ans;
+	sort(q,q+n);
+	int l = q[n-1];
+	bool T[l+1];
+	T[0] = false;
+	T[1] = true;
+	lpi(i,2,ar[1]-1)
+	{
+		if(i&1)
+			T[i] = true;
+		else
+			T[i] = false;
+	}
+	T[ar[1]] = true;
+	lpi(i,ar[1]+1,ar[2]-1)
+	{
+		if(!T[i-1] || !T[i-ar[1]])
+			T[i] = true;
+		else
+			T[i] = false;
+	}
+	T[ar[2]] = true;
+	lpi(i,ar[2]+1,l)
+	{
+		if(!T[i-1] || !T[i-ar[1]] || !T[i-ar[2]])
+			T[i] = true;
+		else
+			T[i] = false;
+	}
+
+	lpi(i,0,n-1)
+	{
+		if(T[q[i]])
+			cout << "A" ;
+		else
+			cout << "B" ;
+	}
 	return 0;
 }

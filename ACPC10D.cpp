@@ -4,6 +4,8 @@
 #include<set>
 #include<string>
 #include<map>
+#include<stack>
+#include<queue>
 #include<algorithm>
 
 #define mod 1000000007
@@ -35,26 +37,41 @@
 using namespace std;
 typedef long long int lli;
 
-int ar[2001];
-vector<vector<int> > T(2001,vector<int>(2001,-1));
-int func(int st,int en,int age)
-{
-	if(st > en)
-		return 0;
-	if(T[st][en] != -1)
-		return T[st][en];
-	return T[st][en]= max(func(st+1,en,age+1)+ar[st]*age , func(st,en-1,age+1)+ar[en]*age);
-}
+
 int main()
 {
 	//ios_base::sync_with_stdio(false); cin.tie(0); 
-	int n;
-	cin >> n;
-	lpi(i,1,n)
+	//cout << "hello";
+	int t=0;
+	while(1)
 	{
-		cin >> ar[i];
+		int n;
+		cin >> n;
+		if(n==0)
+			return 0;
+		int ar[n][3];
+		int T[n][3];
+		lpi(i,0,n-1)
+		{
+			lpi(j,0,2)
+			{
+				cin >> ar[i][j];
+			}
+		}
+		//Base cases :
+		T[1][0] = ar[0][1]+ar[1][0];
+		T[1][1] = min(T[1][0] , min(ar[0][1] , ar[0][1]+ar[0][2]))+ar[1][1];
+		T[1][2] = min(T[1][1] , min(ar[0][1] , ar[0][1]+ar[0][2]))+ar[1][2];
+
+		lpi(i,2,n-1)
+		{
+			T[i][0] = min(T[i-1][0],T[i-1][1]) + ar[i][0];
+			T[i][1] = min(T[i][0] , min(T[i-1][0] , min(T[i-1][1] , T[i-1][2]))) + ar[i][1];
+			T[i][2] = min(T[i][1] , min(T[i-1][1] , T[i-1][2])) + ar[i][2];
+		}
+		t++;
+		cout << t <<". " << T[n-1][1] << endl;
 	}
-	int ans = func(1,n,1);
-	cout << ans;
+
 	return 0;
 }

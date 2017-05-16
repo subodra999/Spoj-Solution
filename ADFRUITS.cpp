@@ -4,6 +4,8 @@
 #include<set>
 #include<string>
 #include<map>
+#include<stack>
+#include<queue>
 #include<algorithm>
 
 #define mod 1000000007
@@ -35,26 +37,77 @@
 using namespace std;
 typedef long long int lli;
 
-int ar[2001];
-vector<vector<int> > T(2001,vector<int>(2001,-1));
-int func(int st,int en,int age)
-{
-	if(st > en)
-		return 0;
-	if(T[st][en] != -1)
-		return T[st][en];
-	return T[st][en]= max(func(st+1,en,age+1)+ar[st]*age , func(st,en-1,age+1)+ar[en]*age);
-}
+
 int main()
 {
 	//ios_base::sync_with_stdio(false); cin.tie(0); 
-	int n;
-	cin >> n;
-	lpi(i,1,n)
+	//cout << "hello";
+
+	while(1)
 	{
-		cin >> ar[i];
+	//scanf("%s %s",a,b);
+	string a,b;
+	cin >> a >> b;
+	if(a == "")
+	break;
+	int la,lb;
+	la = a.length();
+	lb = b.length();
+	vector<vii> T(la+1,vii(lb+1,0));
+
+	a = " "+a;
+	b = " "+b;
+	lpi(i,0,la)
+	{
+		lpi(j,0,lb)
+		{
+			if(i == 0)
+                T[i][j] = 0;
+            else if(j == 0)
+                T[i][j] = 0;
+            else if(a[i] == b[j])
+                T[i][j] = 1 + T[i - 1][j - 1];
+            else
+                T[i][j] = max(T[i - 1][j], T[i][j - 1]);
+		}
 	}
-	int ans = func(1,n,1);
-	cout << ans;
+	string str="";
+	int i = la, j = lb;
+	while (i > 0 && j > 0)
+	{
+		if (a[i] == b[j])
+		{
+			str+=(a[i]);
+			i--; j--;
+		}
+
+		else if (T[i - 1][j] > T[i][j - 1])
+		{
+			str+=(a[i]);
+			i--;
+		}
+		else
+		{
+			str+=(b[j]);
+			j--;
+		}
+	}
+
+	while (i > 0)
+	{
+		str+=(a[i]);
+		i--; 
+	}
+	while (j > 0)
+	{
+		str+=(b[j]);
+		j--;
+	}
+	int l=str.length();
+	l--;
+	for(int i=l;i>=0;--i)
+		cout << str[i];
+	cout << endl;
+	}
 	return 0;
 }

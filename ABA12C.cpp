@@ -1,10 +1,4 @@
-#include<iostream>
-#include<cmath>
-#include<vector>
-#include<set>
-#include<string>
-#include<map>
-#include<algorithm>
+#include<bits/stdc++.h>
 
 #define mod 1000000007
 #define nax 1000005
@@ -34,27 +28,50 @@
 
 using namespace std;
 typedef long long int lli;
-
-int ar[2001];
-vector<vector<int> > T(2001,vector<int>(2001,-1));
-int func(int st,int en,int age)
+vector<int> T(1001);
+void init(int n)
 {
-	if(st > en)
-		return 0;
-	if(T[st][en] != -1)
-		return T[st][en];
-	return T[st][en]= max(func(st+1,en,age+1)+ar[st]*age , func(st,en-1,age+1)+ar[en]*age);
+	lpi(i,0,n)
+		T[i] = nax;
+}
+int rec(vector<pii> &coin,int n)
+{
+	if(n < 0)
+		return nax;
+	if(n == 0)
+		return n;
+	if(T[n] != nax)
+		return T[n];
+	for(vector<pii>::iterator it=coin.begin() ; it!=coin.end() ; ++it)
+	{
+		T[n] = min(T[n],rec(coin,n-(*it).ff)+(*it).ss);
+	}
 }
 int main()
 {
 	//ios_base::sync_with_stdio(false); cin.tie(0); 
-	int n;
-	cin >> n;
-	lpi(i,1,n)
+	//cout << "hello";
+	int t,a;
+	cin >> t;
+	while(t--)
 	{
-		cin >> ar[i];
+		int n,k;
+		cin >> n >> k;
+		init(k);
+		vector<pii> v;
+		lpi(i,1,k)
+		{
+			cin >> a;
+			if(a != -1)
+				v.pb(mp(i,a));
+		}
+		rec(v,k);
+	//	lpi(i,1,k)
+	//		cout << T[i] << " ";
+		if(T[k] >= nax)
+			cout << "-1" << endl;
+		else
+			cout << T[k] << endl;
 	}
-	int ans = func(1,n,1);
-	cout << ans;
 	return 0;
 }
