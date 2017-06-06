@@ -1,4 +1,12 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<cmath>
+#include<vector>
+#include<set>
+#include<string>
+#include<map>
+#include<stack>
+#include<queue>
+#include<algorithm>
 
 #define mod 1000000007
 #define nax 1000005
@@ -13,13 +21,12 @@
 #define vll vector<long long int>
 #define vii vector<int>
 #define sii set<int>
+#define vb vector<bool>
 #define sll set<long long int>
 #define mii map<int,int>
 #define mll map<long long int,long long int>
 #define mis map<int,string>
 #define all(n) n.begin(),n.end()
-#define present(s,x) (s.find(x) != s.end())
-#define cpresent(s,x) (find(all(s),x) != s.end())
 #define tr(container, it) for(__typeof(container.begin()) it = container.begin(); it != container.end(); it++)
 #define lpi(i,a,b) for(int i=a;i<=b;i++)
 #define lpir(i,a,b) for(int i=a;i>=b;i--)
@@ -28,40 +35,34 @@
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 
 using namespace std;
-
-typedef unsigned long long int ull;
 typedef long long int lli;
-typedef vector<vector<lli> > mat;
 
-void swap(lli *a,lli *b) { lli t=*a;  *b=*a, *a=t; }
-bool isOdd(lli n){ if(n&1) return 1; return 0; }
-lli noSetBit(lli n){ lli cnt=0; while(n){ n&=(n-1); cnt++;} return cnt; }
 
 int main()
 {
-	ios_base::sync_with_stdio(false); cin.tie(0); 
+//	ios_base::sync_with_stdio(false); cin.tie(0); 
+	//cout << "hello";
 	int t;
 	cin >> t;
 	while(t--)
 	{
-		lli n,l,r,m;
+		int n,l,r;
 		cin >> n;
-		vector<int> v(10000002,0);
-		lpl(i,1,n)
+		map<int,int> m;
+		lpi(i,0,n-1)
 		{
 			cin >> l >> r;
-			v[l]+=1;
-			v[r+1]-=1;
-			m=max(m,r);
+			m[l]++;
+			m[r+1]--;
 		}
-		lpl(i,1,r)
+		int pre=0,ans=0;
+		for(mii::iterator it=m.begin();it!=m.end();it++)
 		{
-			v[i]+=v[i-1];
+			(*it).ss += pre;
+			pre = (*it).ss;
+			ans = max(ans,(*it).ss);
 		}
-		sort(v.begin(),v.begin()+r+1);
-	//	lpi(i,0,r)
-	//		cout<<v[i]<<" ";
-		cout << v[r] << endl;
+		cout << ans << endl;
 	}
 	return 0;
 }

@@ -1,0 +1,19 @@
+[main] AIBOHP 1000 (0) exception: trapped!
+[main] AIBOHP 1000 (0) exception: code 0xC0000005 at 0x401229
+[main] AIBOHP 1000 (0) exception: ax 0x0 bx 0x248FE88 cx 0x0 dx 0x0
+[main] AIBOHP 1000 (1) exception: si 0xA0313E0 di 0xA031858 bp 0x248FF04 sp 0x248FE58
+[main] AIBOHP 1000 (0) exception: exception is: STATUS_ACCESS_VIOLATION
+[main] AIBOHP 1000 (0) stack: Stack trace:
+[main] AIBOHP 1000 (0) stack: frame 0: sp = 0x248F868, pc = 0x6100A2C3
+[main] AIBOHP 1000 (0) stack: frame 1: sp = 0x248F8A4, pc = 0x770B2D72
+[main] AIBOHP 1000 (0) stack: frame 2: sp = 0x248F8C8, pc = 0x770B2D44
+[main] AIBOHP 1000 (0) stack: frame 3: sp = 0x248F990, pc = 0x770A08EF
+[main] AIBOHP 1000 (0) stack: frame 4: sp = 0x248FF04, pc = 0x61004402
+[main] AIBOHP 1000 (0) stack: frame 5: sp = 0x248FF48, pc = 0x61004420
+[main] AIBOHP 1000 (0) stack: frame 6: sp = 0x248FF54, pc = 0x41624A
+[main] AIBOHP 1000 (0) stack: frame 7: sp = 0x248FF64, pc = 0x40103A
+[main] AIBOHP 1000 (0) stack: frame 8: sp = 0x248FF80, pc = 0x73B262C4
+[main] AIBOHP 1000 (0) stack: frame 9: sp = 0x248FF94, pc = 0x77090FD9
+[main] AIBOHP 1000 (0) stack: frame 10: sp = 0x248FFDC, pc = 0x77090FA4
+[main] AIBOHP 1000 (0) stack: frame 11: sp = 0x248FFEC, pc = 0x0
+[main] AIBOHP 1000 (0) stack: End of stack trace

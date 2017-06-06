@@ -1,0 +1,19 @@
+[main] ANTP 1000 (0) exception: trapped!
+[main] ANTP 1000 (0) exception: code 0xC0000005 at 0x401250
+[main] ANTP 1000 (0) exception: ax 0x414004 bx 0x2C1FF20 cx 0xBB5464 dx 0x4C4B3F8
+[main] ANTP 1000 (0) exception: si 0x0 di 0x401000 bp 0x2C1FF08 sp 0x2C1FED0
+[main] ANTP 1000 (0) exception: exception is: STATUS_ACCESS_VIOLATION
+[main] ANTP 1000 (0) stack: Stack trace:
+[main] ANTP 1000 (0) stack: frame 0: sp = 0x2C1F8E0, pc = 0x6100A2C3
+[main] ANTP 1000 (0) stack: frame 1: sp = 0x2C1F91C, pc = 0x770B2D72
+[main] ANTP 1000 (0) stack: frame 2: sp = 0x2C1F940, pc = 0x770B2D44
+[main] ANTP 1000 (0) stack: frame 3: sp = 0x2C1FA08, pc = 0x770A08EF
+[main] ANTP 1000 (0) stack: frame 4: sp = 0x2C1FF08, pc = 0x61004402
+[main] ANTP 1000 (0) stack: frame 5: sp = 0x2C1FF48, pc = 0x61004420
+[main] ANTP 1000 (0) stack: frame 6: sp = 0x2C1FF54, pc = 0x4136FE
+[main] ANTP 1000 (1) stack: frame 7: sp = 0x2C1FF64, pc = 0x40103A
+[main] ANTP 1000 (0) stack: frame 8: sp = 0x2C1FF80, pc = 0x73B262C4
+[main] ANTP 1000 (0) stack: frame 9: sp = 0x2C1FF94, pc = 0x77090FD9
+[main] ANTP 1000 (0) stack: frame 10: sp = 0x2C1FFDC, pc = 0x77090FA4
+[main] ANTP 1000 (0) stack: frame 11: sp = 0x2C1FFEC, pc = 0x0
+[main] ANTP 1000 (0) stack: End of stack trace

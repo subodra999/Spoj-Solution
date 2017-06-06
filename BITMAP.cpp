@@ -54,48 +54,41 @@ void bfs(int r,int c)
 		//4 cases :
 		if(p.ff+1 < m && vis[p.ff+1][p.ss] && bit[p.ff+1][p.ss] == 0)
 		{
-			lev[p.ff+1][p.ss] = min(lev[p.ff+1][p.ss],lev[p.ff][p.ss]+1);
-			que.push(mp(p.ff+1,p.ss));
+			if(lev[p.ff+1][p.ss] > lev[p.ff][p.ss]+1)
+			{
+				que.push(mp(p.ff+1,p.ss));
+				lev[p.ff+1][p.ss] = lev[p.ff][p.ss]+1;
+			}
 		}	
 		if(p.ff-1 >=0 && vis[p.ff-1][p.ss] && bit[p.ff-1][p.ss] == 0)
 		{
-			lev[p.ff-1][p.ss] = min(lev[p.ff-1][p.ss],lev[p.ff][p.ss]+1);
-			que.push(mp(p.ff-1,p.ss));
+			if(lev[p.ff-1][p.ss] > lev[p.ff][p.ss]+1)
+			{
+				lev[p.ff-1][p.ss] = lev[p.ff][p.ss]+1;
+				que.push(mp(p.ff-1,p.ss));
+			}
 		}	
 		if(p.ss+1 < n && vis[p.ff][p.ss+1] && bit[p.ff][p.ss+1] == 0)
 		{
-			lev[p.ff][p.ss+1] = min(lev[p.ff][p.ss+1],lev[p.ff][p.ss]+1);
-			que.push(mp(p.ff,p.ss+1));
+			if(lev[p.ff][p.ss+1] > lev[p.ff][p.ss]+1)
+			{
+				lev[p.ff][p.ss+1] = lev[p.ff][p.ss]+1;	
+				que.push(mp(p.ff,p.ss+1));
+			}
 		}	
 		if(p.ss-1>=0 && vis[p.ff][p.ss-1] && bit[p.ff][p.ss-1] == 0)
 		{
-			lev[p.ff][p.ss-1] = min(lev[p.ff][p.ss-1],lev[p.ff][p.ss]+1);
-			que.push(mp(p.ff,p.ss-1));
+			if(lev[p.ff][p.ss-1] > lev[p.ff][p.ss]+1)
+			{
+				lev[p.ff][p.ss-1] = lev[p.ff][p.ss]+1;	
+				que.push(mp(p.ff,p.ss-1));
+			}
 		}	
 
 	}	
 }
 
-/*
-void bfs(ll index)
-{
-	queue <ll> que;
-	que.push(index);
-	while(!que.empty())
-	{
-		ll top=que.front();
-		visited[top] = true;
-		que.pop();
-		ifl(i,0,v[top].size())
-		{
-			ll temp=v[top][i];
-			if(!visited[temp])
-			{
-				que.push(temp);
-			}
-		}
-	}
-}*/
+
 int main()
 {
 	//ios_base::sync_with_stdio(false); cin.tie(0); 

@@ -1,4 +1,12 @@
-#include<bits/stdc++.h>
+#include<iostream>
+#include<cmath>
+#include<vector>
+#include<set>
+#include<string>
+#include<map>
+#include<stack>
+#include<queue>
+#include<algorithm>
 
 #define mod 1000000007
 #define nax 1000005
@@ -13,13 +21,12 @@
 #define vll vector<long long int>
 #define vii vector<int>
 #define sii set<int>
+#define vb vector<bool>
 #define sll set<long long int>
 #define mii map<int,int>
 #define mll map<long long int,long long int>
 #define mis map<int,string>
 #define all(n) n.begin(),n.end()
-#define present(s,x) (s.find(x) != s.end())
-#define cpresent(s,x) (find(all(s),x) != s.end())
 #define tr(container, it) for(__typeof(container.begin()) it = container.begin(); it != container.end(); it++)
 #define lpi(i,a,b) for(int i=a;i<=b;i++)
 #define lpir(i,a,b) for(int i=a;i>=b;i--)
@@ -28,36 +35,44 @@
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 
 using namespace std;
-
-typedef unsigned long long int ull;
 typedef long long int lli;
-typedef vector<vector<lli> > mat;
 
-void swap(lli *a,lli *b) { lli t=*a;  *b=*a, *a=t; }
-bool isOdd(lli n){ if(n&1) return 1; return 0; }
-lli noSetBit(lli n){ lli cnt=0; while(n){ n&=(n-1); cnt++;} return cnt; }
 
 int main()
 {
-	ios_base::sync_with_stdio(false); cin.tie(0); 
-	int t;
-	cin >> t;
-	string s;
-	lpi(i,1,t)
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
+	//cout << "hello";
+	int test;
+	cin >> test;
+	lpi(t,1,test)
 	{
+		string s;
 		cin >> s;
-		int l = s.length() , cnt1=0 , cnt0=0;
-		lpi(j,0,l-1)
+		int l = s.length();
+		int one=0,zero=0,f=1;
+		lpir(i,l-1,0)
 		{
-			if(s[j] == '1')
-				cnt1++;
+			if(s[i] == '0')
+				zero++;
 			else
-				cnt0++;
+			{
+				if(zero >= 2)
+					zero -= 2;
+				else
+				{
+					cout << "Case "<< t << ": no" << endl;
+					f=0;
+					break; 
+				}
+			}
 		}
-		if(cnt0 == 2*cnt1)
-			cout << "Case " << i << ": yes"<<endl;
-		else
-			cout << "Case " << i << ": no"<<endl;
+		if(f)
+		{
+			if(zero == 0)
+				cout << "Case "<< t << ": yes" << endl;
+			else
+				cout << "Case "<< t << ": no" << endl;
+		}
 	}
 	return 0;
 }
