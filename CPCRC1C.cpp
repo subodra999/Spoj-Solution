@@ -73,42 +73,56 @@ ll comb(ll n,ll k)
 	}
 	return ans;
 }
-string s;
-int l;
-int ar[121];
-
-int func(int pos,int sum)
+ll dp[10];
+void init()
 {
-	int ans = 0,curr = 0;
-
-	if(pos == l)
-		return 1;
-	
-	lpi(i,pos,l-1)
+	dp[0] = 0;
+	dp[1] = 45;
+	lpi(i,2,9)
 	{
-		curr += ar[i];
-		if(curr >= sum)
-			ans += func(i+1,curr);
+		dp[i] = 10*dp[i-1] + 45*(ll)pow(10,i-1);
+		//cout << dp[i] << endl;
+	}
+}
+int length(ll n)
+{
+	int ans=0;
+	while(n)
+	{
+		ans++;
+		n/=10;
 	}
 	return ans;
+}
+ll func(ll n,int l)
+{
+	if(n<=9)
+		return (n*(n+1))/2;
+	ll cm = dp[l-1];
+	ll p = (ll)pow(10,l-1);
+	int msd = n/p;
+	ll next = n%p;
+	ll ans = cm*(msd) + ((msd*(msd-1))/2)*p + msd*(next+1);
+	return (ans + func(next,l-1));
 }
 int main()
 {
 	//ios_base::sync_with_stdio(false); cin.tie(0); 
 	//cout << "hello";
-	int t=0;
+	init();
+	ll l,r;
 	while(1)
 	{
-		cin >> s;
-		l = s.length();
-		if(s[0] == 'b')
+		cin >> l >> r;
+		if(l==-1 && r==-1)
 			break;
-		++t;
-		lpi(i,0,l-1)
-			ar[i] = s[i]-'0';
-		
-		int ans = func(0,0);
-		cout << t << ". " << ans << endl;
+		int l1=length(l-1);
+		int r1=length(r);
+		ll lsum = func(l-1,l1);
+		ll rsum = func(r,r1);
+		ll ans = rsum - lsum;
+		cout <<ans<< endl; 
+
 	}
 	return 0;
 }

@@ -7,6 +7,7 @@
 #include<stack>
 #include<queue>
 #include<algorithm>
+#include<cstring>
 
 #define mod 1000000007
 #define nax 1000005
@@ -30,71 +31,124 @@
 #define tr(container, it) for(__typeof(container.begin()) it = container.begin(); it != container.end(); it++)
 #define lpi(i,a,b) for(int i=a;i<=b;i++)
 #define lpir(i,a,b) for(int i=a;i>=b;i--)
-#define lpl(i,a,b) for(lli i=a;i<=b;++i)
-#define lplr(i,a,b) for(lli i=a;i>=b;--i)
+#define lpl(i,a,b) for(ll i=a;i<=b;++i)
+#define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 
 using namespace std;
-typedef long long int lli;
+typedef long long int ll;
 
-int r,c;
-char s[51][51];
-int func(int i,int j,int l,char a)
+ll fast_exp(ll a,ll b)
 {
-	if(s[i][j] == a)
+	if(a==0)
+		return 0;
+	if(b==0)
+		return 1;
+	if(b==1)
+		return a;
+	if(b%2==0)
 	{
-		a++;
-		int b,c,d,e,f,g,h,i;
-		if(j-1 >=0)
-		{
-			if(i-1 >= 0)
-				i = func(i-1,j-1,l+1,a);
-			b = func(i,j-1,l+1,a);
-			if(i+1 < r)
-				c = func(i+1,j-1,l+1,a);
-		}
-		if(i-1 >= 0)
-			d = func(i-1,j,l+1,a);
-		if(i+1 < r)
-			e = func(i+1,j,l+1,a);
-		if(j+1 < c)
-		{
-			if(i-1 >= 0)
-				f = func(i-1,j+1,l+1,a);
-			g = func(i,j+1,l+1,a);
-			if(i+1 < r)
-				h = func(i+1,j+1,l+1,a);
-		}
-		return max(b,max(c,max(d,max(e,max(f,max(g,max(h,i)))))));
+		return fast_exp(((a%mod)*(a%mod))%mod,b/2)%mod;
 	}
-	return l;
+	return ((a%mod)*fast_exp(((a%mod)*(a%mod))%mod,(b-1)/2))%mod;
 }
+
+ll comb(ll n,ll k)
+{
+	ll ans=1,j=1;
+	k = max(k,n-k);
+	for(ll i=n;i>k;--i)
+	{
+		ans *= i;
+		if(j<=(n-k))
+		{
+			ans = ans/j;
+			j++;
+		}
+	}
+	if(j<=(n-k))
+	{
+		ans = ans/j;
+		j++;
+	}
+	return ans;
+}
+
 int main()
 {
-	//ios_base::sync_with_stdio(false); cin.tie(0); 
-	//cout << "hello";
+	int n,m,t=1;
 	while(1)
 	{
-		cin >> r >> c;
-		if(r == 0 && c == 0)
-			return 0;
-		lpi(i,0,r-1)
+		cin >> n >> m;
+		if(n==0 && m==0)
+			break;
+		vector<string> ar(n);
+		vector<vii> dp(n,vii(m,0));
+		lpi(i,0,n-1)
+			cin >> ar[i] ;
+		char s='A';
+		int ans=0;
+		int len = 0;
+		while(s<='Z')
 		{
-			lpi(j,0,c-1)
+			lpi(i,0,n-1)
 			{
-				cin >> s[i][j];
+				lpi(j,0,m-1)
+				{
+					if(ar[i][j] == s)
+					{
+						int curr = 0;
+						if(i-1>=0)
+						{
+							if(j-1>=0)
+							{
+								if(dp[i-1][j-1] == len)
+									curr = max(dp[i-1][j-1] , curr);
+							}
+							if(dp[i-1][j] == len)
+								curr = max(dp[i-1][j] , curr);
+							if(j+1<m)
+							{
+								if(dp[i-1][j+1])
+									curr = max(dp[i-1][j+1] , curr); 
+							}	
+						}
+						if(j-1>=0)
+						{
+							if(dp[i][j-1] == len)
+								curr = max(dp[i][j-1] , curr);
+						}
+						if(j+1<m)
+						{
+							if(dp[i][j+1] == len)
+								curr = max(dp[i][j+1] , curr);
+						}
+						if(i+1<n)
+						{
+							if(j-1>=0)
+							{
+								if(dp[i+1][j-1] == len)
+									curr = max(dp[i+1][j-1] , curr);
+							}
+							if(dp[i+1][j] == len)
+								curr = max(dp[i+1][j] , curr);
+							if(j+1<m)
+							{
+								if(dp[i+1][j+1])
+									curr = max(dp[i+1][j+1] , curr); 
+							}	
+						}
+						if(curr == len)
+							dp[i][j] = curr+1;
+						ans = max(ans,dp[i][j]);
+					}
+				}
 			}
+			s++;
+			len++;
 		}
-		int ans = 0;
-		lpi(i,0,r-1)
-		{
-			lpi(j,0,c-1)
-			{
-				if(s[i][j] == 'A')
-					ans = max(ans,func(i,j,0,s[i][j]));
-			}
-		}
-		cout << ans << endl;
+		cout << "Case "<<t << ": " <<ans << endl;
+		t++;
 	}
 	return 0;
 }

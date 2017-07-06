@@ -73,22 +73,31 @@ ll comb(ll n,ll k)
 	}
 	return ans;
 }
-string s;
-int l;
-int ar[121];
-
-int func(int pos,int sum)
+vector<vii> v;
+int func(vii v1,vii v2)
 {
-	int ans = 0,curr = 0;
-
-	if(pos == l)
-		return 1;
-	
-	lpi(i,pos,l-1)
+	int l1 = v1.size();
+	int l2 = v2.size();
+	int dp[l1+1][l2+1];
+	lpi(i,0,l1)
+		dp[i][0] = 0;
+	lpi(i,0,l2)
+		dp[0][i] = 0;
+	int ans=0;
+	lpi(i,0,l1-1)
 	{
-		curr += ar[i];
-		if(curr >= sum)
-			ans += func(i+1,curr);
+		lpi(j,0,l2-1)
+		{
+			if(v1[i] == v2[j])
+			{
+				dp[i+1][j+1] = dp[i][j]+1;
+			}
+			else
+			{
+				dp[i+1][j+1] = max(dp[i][j+1],dp[i+1][j]);
+			}
+			ans = max(ans,dp[i+1][j+1]);
+		}
 	}
 	return ans;
 }
@@ -96,19 +105,37 @@ int main()
 {
 	//ios_base::sync_with_stdio(false); cin.tie(0); 
 	//cout << "hello";
-	int t=0;
-	while(1)
+	int t;
+	cin >> t;
+	while(t--)
 	{
-		cin >> s;
-		l = s.length();
-		if(s[0] == 'b')
-			break;
-		++t;
-		lpi(i,0,l-1)
-			ar[i] = s[i]-'0';
-		
-		int ans = func(0,0);
-		cout << t << ". " << ans << endl;
+		v.clear();
+		while(1)
+		{
+			int n;
+			cin >> n;
+			if(n == 0)
+				break;
+			vii v1;
+			v1.push_back(n);
+			while(1)
+			{
+				cin >> n;
+				if(n == 0)
+				{
+					v.pb(v1);
+					break;
+				}
+				v1.push_back(n);
+			}
+		}
+		int n = v.size();
+		int ans=0;
+		lpi(i,1,n-1)
+		{
+			ans = max(ans,func(v[0],v[i]));
+		}
+		cout << ans << endl;
 	}
 	return 0;
 }
