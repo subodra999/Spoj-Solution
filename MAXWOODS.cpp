@@ -38,59 +38,50 @@
 using namespace std;
 typedef long long int ll;
 
+int dp[205][205][2]; //0->left 1->right
+int ar[205][205];
+
 int main()
 {
 	int t;
 	cin >> t;
 	while(t--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
+		int n,m;
+		char c;
+		cin >> n >> m;
 		lpi(i,1,n)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
+			lpi(j,1,m)
 			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
+				cin >> c;
+				if(c == 'T')
+					ar[i][j] = 2;
+				else if(c == '0')
+					ar[i][j] = 1;
 				else
+					ar[i][j] = 0;
+			}
+		}	
+		memset(dp,0,sizeof(dp));
+		lpir(i,n,1)
+		{
+			lpi(j,1,m)
+			{
+				if(ar[i][j])
 				{
-					l = mid+1;
+					dp[i][j][0] = max(dp[i][j-1][0] , dp[i+1][j][1]) + ar[i][j] - 1;
 				}
 			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
+			lpir(j,m,1)
 			{
-				ma = curr;
-				num = train[idx]-train[i-1];
+				if(ar[i][j])
+				{
+					dp[i][j][1] = max(dp[i][j+1][1] , dp[i+1][j][0]) + ar[i][j] - 1;
+				}
 			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		cout << dp[1][1][1] << endl;
 	}
 	return 0;
 }

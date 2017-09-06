@@ -38,59 +38,43 @@
 using namespace std;
 typedef long long int ll;
 
+int n,k;
+int ar[1001];
+bool dp[1001][1001];
+int ans = 0; 
+
+void recur(int str,int sum)
+{
+	if(sum > k)
+		return ;
+	if(sum > ans)
+		ans = sum;
+	dp[str][sum] = false;
+	if(str+1<n && dp[str+1][sum])
+		recur(str+1, sum);
+	sum += ar[str];
+	if(sum > k)
+		return ;
+	if(sum > ans)
+		ans = sum;
+	if(str+2<n && dp[str+2][sum])
+		recur(str+2,sum);
+}
 int main()
 {
-	int t;
-	cin >> t;
-	while(t--)
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
+	int tc;
+	cin >> tc;
+	lpi(t,1,tc)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
-		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
+		cin >> n >> k;
+		lpi(i,0,n-1)
+			cin >> ar[i];
+		memset(dp,true,sizeof(dp));
+		ans = 0;
+		recur(0,0);
+		cout <<"Scenario #"<<t<<": "<<ans << endl;
 	}
+
 	return 0;
 }

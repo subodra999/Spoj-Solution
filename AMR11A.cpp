@@ -37,60 +37,37 @@
 
 using namespace std;
 typedef long long int ll;
-
 int main()
 {
-	int t;
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
+	int t,n,m;
 	cin >> t;
 	while(t--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		cin >> n >> m;
+		int ar[n][m];
+		lpi(i,0,n-1)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			lpi(j,0,m-1)
+				cin >> ar[i][j];
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
+		ar[n-1][m-1] = max(1,ar[n-1][m-1]);
+		lpir(i,n-2,0)
 		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
+			ar[i][m-1] = max(1,ar[i+1][m-1]-ar[i][m-1]);
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		lpir(i,m-2,0)
+		{
+			ar[n-1][i] = max(1,ar[n-1][i+1]-ar[n-1][i]);
+		}
+		lpir(i,n-2,0)
+		{
+			lpir(j,m-2,0)
+			{
+				ar[i][j] = max(1, min(ar[i+1][j], ar[i][j+e1])-ar[i][j]);
+			}
+		}
+		cout << ar[0][0] << endl;
 	}
 	return 0;
 }

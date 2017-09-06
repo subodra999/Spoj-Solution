@@ -40,57 +40,35 @@ typedef long long int ll;
 
 int main()
 {
-	int t;
-	cin >> t;
-	while(t--)
+	int sx,sy,dx,dy;
+	while(cin >> sx >> sy >> dx >> dy)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		int dp[10][10];
+		memset(dp,10000,sizeof(dp));
+		int ar[8][2] = {{-2,-1}, {-2,1}, {-1,-2}, {-1,2}, {1,-2}, {1,2}, {2,-1}, {2,1}};
+		queue<pii > q;
+		q.push(mp(sx,sy));
+		dp[sx][sy] = 0;
+		while(!q.empty())
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
+			pii p = q.front();
+			//cout << p.ff << " " << p.ss << endl;
+			q.pop();
+			if(p.ff==dx && p.ss==dy)
+				continue;
+			lpi(i,0,7)
 			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
+				int x=p.ff+ar[i][0], y=p.ss+ar[i][1];
+				//cout << dp[x][y] << endl;
+ 				if(x>=0 && x<=7 && y>=0 && y<=7 && (dp[x][y]>(dp[p.ff][p.ss]+x*p.ff+y*p.ss)))
 				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
+					dp[x][y] = dp[p.ff][p.ss]+x*p.ff+y*p.ss;
+					//cout << "y";
+					q.push(mp(x,y));
 				}
 			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		cout << dp[dx][dy] << endl;
 	}
 	return 0;
 }

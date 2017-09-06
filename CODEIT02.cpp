@@ -38,59 +38,33 @@
 using namespace std;
 typedef long long int ll;
 
+int n,k;
+int ar[21];
+
+int recur(int str,int l,int xor)
+{
+	
+	if(l == k)
+		return xor;
+	if(str >= n)
+		return -1;
+	return max(recur(str+1,l,xor), recur(str+1,l+1,xor^ar[str]));
+}
+
 int main()
 {
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
 	int t;
 	cin >> t;
 	while(t--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
-		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
+		cin >> n >> k;
+		lpi(i,0,n-1)
+			cin >> ar[i];
+		
+		cout << recur(0,0,0) << endl;
+		//cout << ans << endl;
 
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
 	}
 	return 0;
 }

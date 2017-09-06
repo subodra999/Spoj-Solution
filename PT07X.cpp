@@ -38,59 +38,40 @@
 using namespace std;
 typedef long long int ll;
 
+vii adj[100005];
+int dp[100005][2];
+
+int recur(int p,int taken,int v)
+{
+	if(dp[v][taken] != -1)
+		return dp[v][taken];
+	int ans = 0;
+	tr(adj[v], it)
+	{
+		if(*it != p)
+		{
+			if(taken)
+				ans += min(recur(v,1,*it), recur(v,0,*it));
+			else
+				ans += recur(v,1,*it);
+		}
+	}
+	ans += taken;
+	return dp[v][taken] = ans;
+}
 int main()
 {
-	int t;
-	cin >> t;
-	while(t--)
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
+	int n,x,y;
+	cin >> n;
+	lpi(i,2,n)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
-		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
+		cin >> x >> y;
+		adj[x].pb(y);
+		adj[y].pb(x);
 	}
+	memset(dp,-1,sizeof(dp));
+	int ans = min(recur(-1,0,1), recur(-1,1,1));
+	cout << ans;
 	return 0;
 }

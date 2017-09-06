@@ -1,3 +1,4 @@
+
 #include<iostream>
 #include<cmath>
 #include<vector>
@@ -37,6 +38,42 @@
 
 using namespace std;
 typedef long long int ll;
+int temp[4][2] = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+char ar[1005][1005];
+bool vis[1005][1005];
+int ans=0,n,m;
+pii p;
+void dfs(int str,int en,int len)
+{
+	if(ans<len)
+	{
+		ans = len;
+		p.ff = str, p.ss = en;
+	}
+	lpi(i,0,3)
+	{
+		int x=str+temp[i][0], y=temp[i][1]+en;
+		if(x>=0 && x<n && y>=0 && y<m && ar[x][y]=='.' && vis[x][y])
+		{
+			vis[x][y] = false;
+			dfs(x,y,len+1);
+		}
+	}
+	vis[str][en] = true;
+}
+
+void dfs2(int str,int en)
+{
+	lpi(i,0,3)
+	{
+		int x=str+temp[i][0], y=temp[i][1]+en;
+		if(x>=0 && x<n && y>=0 && y<m && ar[x][y]=='.' && vis[x][y])
+		{
+			vis[x][y] = false;
+			dfs2(x,y);
+		}
+	}
+}
 
 int main()
 {
@@ -44,53 +81,30 @@ int main()
 	cin >> t;
 	while(t--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
-		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
+		cin >> m >> n;
+		memset(vis,true,sizeof(vis));
 
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
+		lpi(i,0,n-1)
+		{
+			lpi(j,0,m-1)
+				cin >> ar[i][j];
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		ans = 0;
+		lpi(i,0,n-1)
+		{
+			lpi(j,0,m-1)
+			{
+				if(ar[i][j]=='.' && vis[i][j])
+				{
+					vis[i][j] = false;
+					dfs(i,j,1);
+					dfs(p.ff,p.ss,1);
+					dfs2(i,j);
+				}
+			}
+		}
+
+		cout << "Maximum rope length is "<< ans-1 <<"." << endl;
 	}
 	return 0;
 }

@@ -38,59 +38,105 @@
 using namespace std;
 typedef long long int ll;
 
+ll fast_exp(ll a,ll b)
+{
+	if(a==0)
+		return 0;
+	if(b==0)
+		return 1;
+	if(b==1)
+		return a;
+	if(b%2==0)
+	{
+		return fast_exp(((a%mod)*(a%mod))%mod,b/2)%mod;
+	}
+	return ((a%mod)*fast_exp(((a%mod)*(a%mod))%mod,(b-1)/2))%mod;
+}
+
+ll set_one(ll a)
+{
+	ll ans=0;
+	while(a)
+	{
+		a = a&(a-1);
+		ans++;
+	}
+	return ans;
+}
+
+ll d,x,y;
+void extendedeuclid(ll a,ll b)
+{
+    ll temp;
+    if(!b)
+    {
+        d=a;
+        x=1;
+        y=0;
+    }
+    else
+    {
+        extendedeuclid(b,a%b);
+        temp = x;
+        x = y;
+        y = temp-(a/b)*y;
+    }
+}
+
+ll modinverse(ll a,ll b)
+{
+    extendedeuclid(a,b);
+    return (x%b+b)%b;
+}
+
+ll comb(ll n,ll k)
+{
+	ll ans=1,j=1;
+	k = max(k,n-k);
+	for(ll i=n;i>k;--i)
+	{
+		ans *= i;
+		if(j<=(n-k))
+		{
+			ans = ans/j;
+			j++;
+		}
+	}
+	if(j<=(n-k))
+	{
+		ans = ans/j;
+		j++;
+	}
+	return ans;
+}
+
+ll a,b,c;
+
+ll recur(ll str,ll k) 
+{
+	int ans = 0;
+	if(k == c)
+		return 1;
+	lpi(i,str,b-1)
+	{
+		ans += recur(i+1,k+1);
+	}
+	return ans;
+}
+
 int main()
 {
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
+	//cout << "hello";
 	int t;
 	cin >> t;
 	while(t--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
-		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
+		cin >> a >> b >> c;
+		ll ans = 0;
+		lpi(i,1,b-1)
+			ans += recur(i,0);
+		cout << a << " " << ans << endl;
 	}
 	return 0;
 }

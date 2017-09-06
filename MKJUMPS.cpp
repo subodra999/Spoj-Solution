@@ -38,59 +38,65 @@
 using namespace std;
 typedef long long int ll;
 
+int ar[8][2] = {{-2,-1}, {-2,1}, {-1,-2}, {-1,2}, {1,-2}, {1,2}, {2,-1}, {2,1}};
+bool chess[15][15];
+int row,s,e;
+int col[15][2];
+int ans=0;
+
+
+void dfs(int str,int en,int len)
+{
+	ans = max(ans,len);
+	lpi(i,0,7)
+	{
+		int x=str+ar[i][0], y=ar[i][1]+en;
+		if(x>=0 && x<row && y>=col[x][0] && y<=col[x][1] && chess[x][y])
+		{
+			chess[x][y] = false;
+			dfs(x,y,len+1);
+		}
+	}
+	chess[str][en] = true;
+}
+
 int main()
 {
-	int t;
-	cin >> t;
-	while(t--)
+	int t=0;
+	while(1)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		t++;
+		int str;
+		cin >> row;
+		if(row==0)
+			return 0;
+		memset(chess, false, sizeof(chess));
+		int cnt=0;
+		lpi(i,0,row-1)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			cin >> s >> e;
+			if(i==0)
+				str = s;
+			col[i][0] = s, col[i][1] = s+e-1;
+			lpi(j,s,s+e-1)
+			{
+				chess[i][j] = true;
+				cnt++;
+			}
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
+		//cout << cnt << " ";
+		ans = 0;
+		chess[0][str] = false;
+		dfs(0,str,1);
+		if(cnt-ans == 1)
 		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
+			cout << "Case "<<t<<", "<<cnt-ans<<" square can not be reached."<<endl;
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		else
+		{
+			cout << "Case "<<t<<", "<<cnt-ans<<" squares can not be reached."<<endl;
+		}
 	}
+	
 	return 0;
 }

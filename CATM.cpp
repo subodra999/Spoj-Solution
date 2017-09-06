@@ -40,57 +40,81 @@ typedef long long int ll;
 
 int main()
 {
-	int t;
+	int n,m;
+	cin >> n >> m;
+
+	int t,mx,my,c1x,c2x,c1y,c2y;
 	cin >> t;
 	while(t--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		cin >> mx >> my >> c1x >> c1y >> c2x >> c2y;
+		int cnt1=0, cnt2=0, cnt3=0, cnt4=0;
+		//up
+		if(c1y>=my)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			if(c1y-my<=abs(mx-c1x))
+			{
+				cnt1++;
+			}
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
+		if(c2y>=my)
 		{
-			int findd = train[i-1]+people;
+			if(c2y-my<=abs(mx-c2x))
+			{
+				cnt1++;
+			}
+		}
+		//down
+		if(c1y<=my)
+		{
+			if(my-c1y<=abs(mx-c1x))
+			{
+				cnt2++;
+			}
+		}
+		if(c2y<=my)
+		{
+			if(my-c2y<=abs(mx-c2x))
+			{
+				cnt2++;
+			}
+		}
+		//left
+		if(c1x<=mx)
+		{
+			if(mx-c1x<=abs(my-c1y))
+			{
+				cnt3++;
+			}
+		}
+		if(c2x<=mx)
+		{
+			if(mx-c2x<=abs(my-c2y))
+			{
+				cnt3++;
+			}
+		}
+		//right
+		if(c1x>=mx)
+		{
+			if(c1x-mx<=abs(my-c1y))
+			{
+				cnt4++;
+			}
+		}
+		if(c2x>=mx)
+		{
+			if(c2x-mx<=abs(my-c2y))
+			{
+				cnt4++;
+			}
+		}
 
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
+		if(cnt1>=1 && cnt2>=1 && cnt3>=1 && cnt4>=1)
+			cout << "NO" << endl;
+		else
+			cout << "YES" << endl;
 	}
+
 	return 0;
 }

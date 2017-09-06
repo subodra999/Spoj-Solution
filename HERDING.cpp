@@ -38,59 +38,67 @@
 using namespace std;
 typedef long long int ll;
 
+int n,m;
+int ar[4][2] = {{-1,0}, {1,0}, {0,1}, {0,-1}};
+int grid[1003][1003];
+int vis[1003][1003];
+
+int bfs(int str,int en, int cnt)
+{
+	queue<pii > q;
+	q.push(mp(str,en));
+	vis[str][en] = cnt;
+	while(!q.empty())
+	{
+		pii p = q.front();
+		q.pop();
+		int x = p.ff+ar[grid[p.ff][p.ss]][0], y = p.ss + ar[grid[p.ff][p.ss]][1];
+		if(x>=0 && x<n && y>=0 && y<m && vis[x][y]==-1)
+		{
+			q.push(mp(x,y));
+			vis[x][y] = cnt;
+		}
+		else
+		{
+			if(vis[x][y] == cnt)
+				return 1;
+			else
+				return 0;
+		}
+	}
+
+}
 int main()
 {
-	int t;
-	cin >> t;
-	while(t--)
+	char c;
+	cin >> n >> m;
+	lpi(i,0,n-1)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		lpi(j,0,m-1)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			cin >> c;
+			if(c == 'N')
+				grid[i][j] = 0;
+			else if(c == 'S')
+				grid[i][j] = 1;
+			else if(c == 'E')
+				grid[i][j] = 2;
+			else
+				grid[i][j] = 3;
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
 	}
+	int ans = 0, cnt = 1;
+	memset(vis,-1,sizeof(vis));
+	lpi(i,0,n-1)
+	{
+		lpi(j,0,m-1)
+		{
+			if(vis[i][j] == -1)
+			{
+				ans += bfs(i,j,cnt++);
+			}
+		}
+	}
+	cout << ans;
 	return 0;
 }

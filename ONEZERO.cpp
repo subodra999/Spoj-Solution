@@ -38,6 +38,42 @@
 using namespace std;
 typedef long long int ll;
 
+bool check(string s, int n)
+{
+	int l = s.length();
+	ll curr=0;
+	lpi(i,0,l-1)
+	{
+		curr*=10;
+		curr+=(s[i]-'0');
+		curr%=n;
+	}
+	return curr==0;
+}
+
+void init(int n)
+{
+	string s="1";
+	queue<string> q;
+	q.push(s);
+	while(1)
+	{
+		string s = q.front();
+		if(check(s+'0',n))
+		{
+			cout << (s+'0') << endl;
+			return;
+		}
+		q.push(s+'0');
+		if(check(s+'1',n))
+		{
+			cout << (s+'1') <<endl;
+			return;
+		}
+		q.push(s+'1');
+		q.pop();
+	}
+}
 int main()
 {
 	int t;
@@ -45,52 +81,11 @@ int main()
 	while(t--)
 	{
 		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
-		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
+		cin >> n;
+		if(n==1)
+			cout<<1<<endl;
+		else
+			init(n);
 	}
 	return 0;
 }

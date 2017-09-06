@@ -34,9 +34,20 @@
 #define lpl(i,a,b) for(ll i=a;i<=b;++i)
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
+#define speed ios::sync_with_stdio(false)
 
 using namespace std;
 typedef long long int ll;
+ll set_one(ll a)
+{
+	ll ans=0;
+	while(a)
+	{
+		a = a&(a-1);
+		ans++;
+	}
+	return ans;
+}
 
 int main()
 {
@@ -45,52 +56,59 @@ int main()
 	while(t--)
 	{
 		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		cin >> n;
+		int g[n][n];
+		lpi(i,0,n-1)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			lpi(j,0,n-1)
+			{
+				cin >> g[i][j];
+			}
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
+		int x,y,x1,y1,xx,yy;
+		cin >> x >> y >> x1 >> y1;
+		int ar[4][2] = {{1,0}, {-1,0}, {0,1}, {0,-1}};
+		ll limit = 1<<11;
+		bool vis[n][n];
+		ll ans = 11;
+		lpl(mask,1,limit-1)
 		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
+			memset(vis,true,sizeof(vis));
+			queue<pii > q;
+			if(mask&(1<<g[x][y]))
 			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
+				q.push(mp(x,y));
+				vis[x][y] = false;
+			}
+			while(!q.empty())
+			{
+				pii p = q.front();
+				q.pop();
+				if(p.ff == x1 && p.ss == y1)
 				{
-					idx = mid;
-					r = mid-1;
+					ans = min(ans,set_one(mask));
+					break;
 				}
-				else
+				for(int i=0;i<=3;i++)
 				{
-					l = mid+1;
+					xx=p.ff+ar[i][0], yy=p.ss+ar[i][1];
+					if(xx<n && xx>=0 && yy<n && yy>=0)
+					{
+						ll mask1 = 1<<g[xx][yy];
+						if(vis[xx][yy])
+						{
+							if(mask&mask1)
+							{
+								vis[xx][yy] = false;
+								q.push(mp(xx,yy));
+							}
+						}
+					}
 				}
 			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		cout << ans << endl;
 	}
+	
 	return 0;
 }

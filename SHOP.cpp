@@ -40,57 +40,83 @@ typedef long long int ll;
 
 int main()
 {
-	int t;
-	cin >> t;
-	while(t--)
+	ios_base::sync_with_stdio(false); cin.tie(0); 
+	while(1)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		int n,m,str,des;
+		char c;
+		cin >> m >> n;
+		if(n==0)
+			return 0;
+		int g[n][m];
+		lpi(i,0,n-1)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
+			lpi(j,0,m-1)
 			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
+				cin >> c;
+				if(c == 'S')
 				{
-					idx = mid;
-					r = mid-1;
+					g[i][j] = 0;
+					str = i*m+j;
+				}
+				else if(c == 'D')
+				{
+					g[i][j] = 0;
+					des = i*m+j;
+				}
+				else if(c == 'X')
+				{
+					g[i][j] = -1;
 				}
 				else
 				{
-					l = mid+1;
+					g[i][j] = c-'0';
 				}
 			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		int ar[4][2] = {{1,0},{-1,0},{0,1},{0,-1}};
+		vector<pii > adj[n*m];
+		lpi(i,0,n-1)
+		{
+			lpi(j,0,m-1)
+			{
+				int p = i*m+j;
+				if(p == des)
+					continue;
+				lpi(k,0,3)
+				{
+					int x=i+ar[k][0] , y=j+ar[k][1];
+					if(x>=0 && x<n && y>=0 && y<m && g[x][y]!=-1)
+					{
+						adj[p].pb(mp(x*m+y, g[x][y]));            //idx, time
+					}
+				}
+			}
+		}
+
+		vii dp(n*m,100000);
+		queue<pii > q;
+		q.push(mp(0,str));
+		int ans = 100000;
+		while(!q.empty())
+		{
+			pii p = q.front();
+			q.pop();
+			if(p.ss == des)
+			{
+				ans = min(p.ff,ans);
+			}
+			tr(adj[p.ss],it)
+			{
+				if((*it).ff != p.ss && dp[(*it).ff]>(p.ff+(*it).ss))
+				{
+					dp[(*it).ff] = (*it).ss+p.ff;
+					q.push(mp((*it).ss+p.ff,(*it).ff));
+				}
+			}
+		}	
+		cout << ans << endl;	
 	}
+	
 	return 0;
 }

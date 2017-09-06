@@ -9,8 +9,9 @@
 #include<algorithm>
 #include<cstring>
 
+#define speed ios::sync_with_stdio(false)
 #define mod 1000000007
-#define nax 1000005
+#define nax 10005
 #define inf 100000000000000000LL
 #define pb push_back
 #define mp make_pair
@@ -37,6 +38,40 @@
 
 using namespace std;
 typedef long long int ll;
+typedef long double ld;
+
+ll fast_exp(ll a,ll b)
+{
+	if(a==0)
+		return 0;
+	if(b==0)
+		return 1;
+	if(b==1)
+		return a;
+	if(b%2==0)
+	{
+		return fast_exp(((a%mod)*(a%mod))%mod,b/2)%mod;
+	}
+	return ((a%mod)*fast_exp(((a%mod)*(a%mod))%mod,(b-1)/2))%mod;
+}
+
+string s;
+int ans,l;
+
+int recur(int i, int len)
+{
+	if(s[i] == 'n')
+	{
+		int next = recur(i+1,len+1);
+		if(next < l)
+			recur(next,len+1);
+	}
+	else
+	{
+		ans = max(ans, len);
+		return i+1;
+	}
+}
 
 int main()
 {
@@ -44,53 +79,12 @@ int main()
 	cin >> t;
 	while(t--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
-		{
-			cin >> train[i];
-			train[i] += train[i-1];
-		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
+		cin >> s;
+		l = s.length();
+		ans = 0;
+		recur(0,0);
+		cout << ans << endl;
 	}
 	return 0;
 }
+

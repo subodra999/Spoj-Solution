@@ -38,59 +38,50 @@
 using namespace std;
 typedef long long int ll;
 
+ll set_one(ll a)
+{
+	ll ans=0;
+	while(a)
+	{
+		a = a&(a-1);
+		ans++;
+	}
+	return ans;
+}
+
 int main()
 {
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
 	int t;
 	cin >> t;
 	while(t--)
 	{
 		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		cin >> n;
+		int ar[n][n];
+		lpi(i,0,n-1)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			lpi(j,0,n-1)
+				cin >> ar[i][j];
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
+		ll limit = 1LL<<n;
+		ll dp[limit];
+		lpl(i,0,limit-1)
+			dp[i] = 0;
+		dp[0] = 1;
+		lpl(mask,0,limit-1)
 		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
+			ll cnt = set_one(mask);
+			lpi(i,0,n-1)
 			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
+				if(!(mask&(1LL<<i)))   //ith bit unset
 				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
+					if(ar[cnt][i] == 1)
+						dp[mask|(1LL<<i)] += dp[mask];
 				}
 			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		cout << dp[limit-1] << endl;
 	}
 	return 0;
 }

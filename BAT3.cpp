@@ -40,57 +40,45 @@ typedef long long int ll;
 
 int main()
 {
-	int t;
-	cin >> t;
-	while(t--)
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
+	int tc;
+	cin >> tc;
+	while(tc--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		int n,m;
+		cin >> n >> m;
+		int ar[n];
+		lpi(i,0,n-1)
+			cin >> ar[i];
+		vii temp1(n,1), temp2(n,1);
+		lpi(i,0,n-1)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			lpi(j,i+1,n-1)
+			{
+				if(ar[j]<ar[i])
+					temp1[j] = max(temp1[j], temp1[i]+1);
+			}
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
+		lpi(i,m+1,n-1)
 		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
+			lpi(j,i+1,n-1)
 			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
+				if(ar[i]>ar[j])
+					temp2[j] = max(temp2[j], temp2[i]+1);
 			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		int ans = 0;
+		lpi(i,0,n-1)
+		{
+			if(i != m)
+				ans = max(ans,temp1[i]);
+		}
+		lpi(i,m+1,n-1)
+		{
+			ans = max(ans, temp1[m]+temp2[i]);
+		}
+		cout << ans << endl;
 	}
+
 	return 0;
 }

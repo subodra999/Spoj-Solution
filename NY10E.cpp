@@ -37,60 +37,38 @@
 
 using namespace std;
 typedef long long int ll;
+int n;
+ll dp[65][10];
 
+ll recur(int str,int l)
+{
+	if(l == n)
+		return 1;
+	if(dp[l][str] != -1)
+		return dp[l][str];
+	ll ans=0;
+	lpi(i,str,9)
+	{
+		ans += recur(i,l+1);
+	}
+	return dp[l][str] = ans;
+}
 int main()
 {
+	//ios_base::sync_with_stdio(false); cin.tie(0); 
 	int t;
 	cin >> t;
 	while(t--)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		memset(dp,-1,sizeof(dp));
+		int tc;
+		ll ans=0;
+		cin >> tc >> n;
+		lpi(i,0,9)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			ans += recur(i,1);
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
-		{
-			int findd = train[i-1]+people;
-
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
-				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
-				}
-			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
-		}
-		cout << num << " " << ma << endl;
-		
-		
+		cout << tc << " " << ans << endl;
 	}
 	return 0;
 }

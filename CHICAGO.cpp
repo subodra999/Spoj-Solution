@@ -1,13 +1,4 @@
-#include<iostream>
-#include<cmath>
-#include<vector>
-#include<set>
-#include<string>
-#include<map>
-#include<stack>
-#include<queue>
-#include<algorithm>
-#include<cstring>
+#include<bits/stdc++.h>
 
 #define mod 1000000007
 #define nax 1000005
@@ -38,59 +29,56 @@
 using namespace std;
 typedef long long int ll;
 
+vector<pair<int, long double> > adj[2000];
+vector<long double> dp(2000);
 int main()
 {
-	int t;
-	cin >> t;
-	while(t--)
+	ios_base::sync_with_stdio(false); cin.tie(0); 
+	while(1)
 	{
-		int n;
-		ll people;
-		cin >> n >> people;
-		vll train(n+1);
-		train[0]=0;
-		lpi(i,1,n)
+		int n,m;
+		cin >> n;
+		lpi(i,0,n)
 		{
-			cin >> train[i];
-			train[i] += train[i-1];
+			adj[i].clear();
+			dp[i] = 0;
 		}
-		ll ma=0, num=0;
-		train.pb(train[n]+people+1);
-		lpi(i,1,n)
+		if(n == 0)
+			return 0;
+		cin >> m;
+		int x,y;
+		long double z;
+		lpi(i,0,m-1)
 		{
-			int findd = train[i-1]+people;
+			cin >> x >> y >> z;
+			adj[x].pb(mp(y,z));
+			adj[y].pb(mp(x,z));
+		}
+		priority_queue<pair<long double,int>, vector<pair<long double,int> > > q;
+		q.push(mp(1,1));
+		dp[1] = 1;
+		while(!q.empty())
+		{
+			pair<long double,int> p = q.top();
+			q.pop();
+			if(p.ss == n)
+			{
+				cout <<fixed<<setprecision(6)<< p.ff*100 << " percent" << endl;
+				break;
+			}
+			for(int i=0;i<adj[p.ss].size();i++)
+			{
+				pair<int,long double> pp = adj[p.ss][i];
 
-			int l=i, r=n+1, idx=-1;
-			while(l<=r)
-			{
-				int mid = (l+r)/2;
-				if(train[mid]>findd)
+				if(dp[pp.ff] < p.ff*pp.ss)
 				{
-					idx = mid;
-					r = mid-1;
-				}
-				else
-				{
-					l = mid+1;
+					dp[pp.ff] = p.ff*pp.ss;
+					q.push(mp(dp[pp.ff],pp.ff));
 				}
 			}
-			
-			idx--;
-			int curr = idx-i+1;
-			if(curr > ma)
-			{
-				ma = curr;
-				num = train[idx]-train[i-1];
-			}
-			else if(curr == ma)
-			{
-				num = min(num, train[idx]-train[i-1]);
-			}
-		
 		}
-		cout << num << " " << ma << endl;
-		
-		
+		//cout << "out" << endl;
 	}
+	
 	return 0;
 }
