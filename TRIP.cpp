@@ -35,41 +35,83 @@
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 #define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
+string s1,s2;
+int dp[85][85];
+set<string> SET;
 
-int recur(int one,int cnt,int idx)
+void dp_matrix()
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
+	memset(dp,0,sizeof(dp));
+	lpi(i,1,s1.length())
 	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
+		lpi(j,1,s2.length())
+		{
+			if(s1[i-1] == s2[j-1])
+				dp[i][j] = dp[i-1][j-1]+1;
+			else
+				dp[i][j] = max(dp[i-1][j] , dp[i][j-1]);
+		}
 	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
 }
 
+map<string,bool> processed[81][81]; 
+
+void print(int i,int j,string s)
+{
+	if(processed[i][j].find(s) != processed[i][j].end())
+    	return;
+	if(i == 0 || j == 0)
+	{
+		SET.in(s);
+		return;
+	}
+	if(s1[i-1] == s2[j-1])
+	{
+		string str = s;
+		str = s1[i-1]+str;
+		print(i-1,j-1,str);
+	}
+	else if(dp[i-1][j] > dp[i][j-1])
+	{
+		print(i-1,j,s);	
+	}
+	else if(dp[i][j-1] > dp[i-1][j])
+	{
+		print(i,j-1,s);
+	}
+	else
+	{
+		print(i-1,j,s);
+		print(i,j-1,s);
+	}
+	processed[i][j][s] = true;
+}
 int main()
 {
-	test()
+	int t;
+	scanf("%d",&t);
+	while(t--)
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		char c_s1[81], c_s2[81];
+		scanf("%s\n%s",c_s1,c_s2);
+		s1 = c_s1; s2 = c_s2;
+		dp_matrix();
+		SET.clear();
+		lpi(i,0,80)
+		{
+			lpi(j,0,80)
+				processed[i][j].clear();
+		}
+		print(s1.length(), s2.length(), "");
+		tr(SET,it)
+		{
+			printf("%s\n", it->c_str());
+		}
+		printf("\n");
 	}
 	return 0;
 }

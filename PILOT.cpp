@@ -35,41 +35,49 @@
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 #define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
-
-int recur(int one,int cnt,int idx)
+struct node
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
+	ll cap, ast;
+};
+
+int n;
+node ar[10005];
+ll ans=0;
+ll dp[10005][5005];
+
+ll recur(int idx,int captain,int assistant)
+{
+	if(dp[idx][assistant] != -1)
+		return dp[idx][assistant];
+	if(idx == n)
 	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
+		return 0;
 	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
+	if(assistant == n/2)
+	{
+		return dp[idx][assistant] = (ar[idx].cap+recur(idx+1,captain+1,assistant));
+	}
+	else if(assistant == captain)
+	{
+		return dp[idx][assistant] = (ar[idx].ast+recur(idx+1,captain,assistant+1));
+	}
 	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
+	{
+		return dp[idx][assistant] = min(ar[idx].ast+recur(idx+1,captain,assistant+1), ar[idx].cap+recur(idx+1,captain+1,assistant));
+	}
 }
 
 int main()
 {
-	test()
-	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
-	}
+	cin >> n;
+	lpi(i,0,n-1)
+		cin >> ar[i].cap >> ar[i].ast;
+	memset(dp,-1,sizeof(dp));
+	dp[0][0] = ar[0].ast+recur(1,0,1);
+	cout << dp[0][0];
 	return 0;
 }

@@ -40,36 +40,49 @@
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
+int n,k,a;
+bool open[100];
+int dp[100][100][100];
 
-int recur(int one,int cnt,int idx)
+int recur(int op, int cl, int idx)
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
+	if(dp[op][cl][idx] != -1)
+		return dp[op][cl][idx];
+	if(idx == 2*n)
 	{
-		if(cnt == k)
-			return 1;
+		if(open[idx])
+			return dp[op][cl][idx] = 0;
+		if(cl+1 == op)
+			return dp[op][cl][idx] = 1;
 		else
-			return 0;
+			return dp[op][cl][idx] = 0;
 	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
+	if(open[idx])
+	{
+		return dp[op][cl][idx] = recur(op+1,cl,idx+1);
+	}
+	if(op == cl)
+		return dp[op][cl][idx] = recur(op+1,cl,idx+1);
+	else if(op > cl && op < n)
+		return dp[op][cl][idx] = recur(op+1,cl,idx+1)+recur(op,cl+1,idx+1);
 	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
+		return dp[op][cl][idx] = recur(op,cl+1,idx+1);
 }
 
 int main()
 {
 	test()
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		memset(open, false, sizeof(open));
+		memset(dp, -1, sizeof(dp));
+		cin >> n >> k;
+		lpi(i,1,k)
+		{
+			cin >> a;
+			open[a] = true;
+		}
+		int ans = recur(1,0,2);
+		cout << ans << endl;
 	}
 	return 0;
 }

@@ -39,7 +39,7 @@ lli noSetBit(lli n){ lli cnt=0; while(n){ n&=(n-1); cnt++;} return cnt; }
 map<int,string> m;
 void init()
 {
-		m[0] = "0";
+	m[0] = "0";
 	m[1] = "2(0)";
 	m[2] = "2";
 	m[3] = "2+2(0)";

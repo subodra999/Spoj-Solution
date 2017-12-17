@@ -9,6 +9,7 @@
 #include<algorithm>
 #include<cstring>
 
+
 #define mod 1000000007
 #define nax 1000005
 #define inf 100000000000000000LL
@@ -34,42 +35,41 @@
 #define lpl(i,a,b) for(ll i=a;i<=b;++i)
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
-#define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
+#define test() int t; scanf("%d",&t); while(t--)
+
 
 using namespace std;
 typedef long long int ll;
+const int N =(int) 1e3+4;
 
-int n,k,tc;
-int dp[105][105][105];
-
-int recur(int one,int cnt,int idx)
-{
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
-	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
-	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
-}
 
 int main()
 {
-	test()
+	int n,m;
+	cin >> n >> m;
+	ll cost[26];
+	lpi(i,0,25)
+		cin >> cost[i];
+	string s1,s2;
+	cin >> s1 >> s2;
+	s1 = " "+s1;
+	s2 = " "+s2;
+	ll dp[n+1][m+1];
+	memset(dp,0,sizeof(dp));
+	lpi(i,1,n)
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		lpi(j,1,m)
+		{
+			if(s1[i] == s2[j])
+			{
+				dp[i][j] = dp[i-1][j-1]+cost[s1[i]-'a'];
+			}
+			else
+			{
+				dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
+			}
+		}
 	}
+	cout << dp[n][m];
 	return 0;
 }

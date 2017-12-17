@@ -1,2 +1,0 @@
-# Spoj-Solution
-Codes

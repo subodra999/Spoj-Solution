@@ -1,13 +1,4 @@
-#include<iostream>
-#include<cmath>
-#include<vector>
-#include<set>
-#include<string>
-#include<map>
-#include<stack>
-#include<queue>
-#include<algorithm>
-#include<cstring>
+#include<bits/stdc++.h>
 
 #define mod 1000000007
 #define nax 1000005
@@ -35,41 +26,61 @@
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 #define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
+vector<pii> adj[7];
+int t;
 
-int n,k,tc;
-int dp[105][105][105];
-
-int recur(int one,int cnt,int idx)
+int recur(int type,int cost,int quality)
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
+	if(type == 7)
 	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
+		return quality;
 	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
+	int flag = 0, ans = 0;
+	for(int i=0;i<adj[type].size();i++)
+	{
+		if(cost+adj[type][i].ff < t)
+		{
+			int temp = recur(type+1,cost+adj[type][i].ff,adj[type][i].ss);
+			if(temp != -1)
+			{
+				flag = 1;
+				ans = max(ans, temp);
+			}
+		}
+	}
+	if(flag)
+		return min(ans, quality);
 	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
+		return -1;
 }
-
 int main()
 {
-	test()
+	int n,a,b,c;
+	cin >> n >> t;
+	lpi(i,0,n-1)
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		cin >> a >> b >> c;
+		if(a>=1 && a<=6)
+		{
+			adj[a].pb(mp(b,c));
+		}
 	}
+	int ans = 0 , flag=1;
+	for(int i=0;i<adj[1].size();i++)
+	{
+		int temp = recur(2,adj[1][i].ff,adj[1][i].ss);
+		if(temp != -1)
+		{
+			flag = 0;
+			ans = max(ans, temp);
+		}
+	}
+	if(flag)
+		cout << 0;
+	else
+		cout << ans;
 	return 0;
 }

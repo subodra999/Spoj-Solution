@@ -9,6 +9,7 @@
 #include<algorithm>
 #include<cstring>
 
+
 #define mod 1000000007
 #define nax 1000005
 #define inf 100000000000000000LL
@@ -34,42 +35,42 @@
 #define lpl(i,a,b) for(ll i=a;i<=b;++i)
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
-#define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
+#define test() int t; scanf("%d",&t); while(t--)
+
 
 using namespace std;
 typedef long long int ll;
+const int N =(int) 5e2+4;
 
-int n,k,tc;
-int dp[105][105][105];
-
-int recur(int one,int cnt,int idx)
+ll n,k,t;
+ll h[N];
+ll dp[N][N];
+ll recur(ll next,ll cnt)
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
+	if(cnt == 0 || next == n)
+		return 0;
+	if(dp[next][cnt] != -1)
+		return dp[next][cnt];
+	ll curr = recur(next+1,cnt);
+	ll hg = inf;
+	for(ll i=next+1;i<=n;i++)
 	{
-		if(cnt == k)
-			return 1;
+		hg = min(hg,h[i]);
+		if(i-next <= t)
+			curr = max(curr, hg*(i-next)+recur(i,cnt-1));
 		else
-			return 0;
+			break;
 	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
+	return dp[next][cnt] = curr;
 }
 
 int main()
 {
-	test()
-	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
-	}
+	cin >> n >> k >> t;
+	memset(dp,-1,sizeof(dp));
+	lpi(i,1,n)
+		cin >> h[i];
+	ll ans = recur(0,k);
+	cout << ans;
 	return 0;
 }

@@ -35,41 +35,49 @@
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 #define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
-
-int recur(int one,int cnt,int idx)
+bool cmp(pii a,pii b)
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
-	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
-	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
+	if(a.ff == b.ff)
+		return a.ss < b.ss;
+	return a.ff < b.ff;
 }
-
 int main()
 {
-	test()
+	int t;
+	cin >> t;
+	while(t--)
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		int n;
+		cin >> n;
+		vector<pii > v(n);
+		lpi(i,0,n-1)
+		{
+			cin >> v[i].ff ;
+		}
+		lpi(i,0,n-1)
+		{
+			cin >> v[i].ss;
+		}
+		sort(all(v),cmp);
+		vector<int> dp(n,1);
+		int ans = 1;
+		lpi(i,1,n-1)
+		{
+			lpi(j,0,i-1)
+			{
+				if(v[i].ss >= v[j].ss)
+				{
+					dp[i] = max(dp[i], dp[j]+1);
+				}
+			}
+			ans = max(ans, dp[i]);
+			//cout << dp[i] << " ";
+		}
+		cout << ans << endl << endl;
 	}
 	return 0;
 }

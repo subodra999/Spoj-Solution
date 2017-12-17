@@ -35,41 +35,56 @@
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 #define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
-
-int recur(int one,int cnt,int idx)
+struct node
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
-	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
-	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
-}
+	ll cap, ast;
+};
+
+
 
 int main()
 {
-	test()
+	int n;
+	while(cin >> n)
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		ll ar[n];
+		ll dp[n][n], dp_t[n][n];
+		memset(dp,0,sizeof(dp));
+		memset(dp_t,0,sizeof(dp_t));
+		lpi(i,0,n-1)
+		{
+			cin >> ar[i];
+			dp_t[i][i] = ar[i];
+		}
+		lpi(i,0,n-2)
+		{
+			dp_t[i][i+1] = (ar[i]+ar[i+1])%100;
+			dp[i][i+1] = (ar[i]*ar[i+1]);
+		}
+		lpi(i,2,n)
+		{
+			lpi(j,0,n-i)   //start
+			{
+				ll temp = inf, smoke;
+				int lim = j+i-1;
+				lpi(k,j,lim-1)
+				{
+					ll x = dp_t[j][k]*dp_t[k+1][lim] + dp[j][k] + dp[k+1][lim];
+					if(x < temp)
+					{
+						temp = x;
+						smoke = (dp_t[j][k]+dp_t[k+1][lim])%100;
+					}
+				}
+				dp[j][lim] = temp;
+				dp_t[j][lim] = smoke;
+			}
+		}
+		cout << dp[0][n-1] << endl;
 	}
 	return 0;
 }

@@ -40,36 +40,38 @@
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
+int n;
+int ar[205];
+int dp[205][205][205];
 
-int recur(int one,int cnt,int idx)
+int recur(int b_idx,int w_idx,int idx)
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
+	if(dp[idx][b_idx][w_idx] != -1)
+		return dp[idx][b_idx][w_idx];
 	if(idx > n)
-	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
-	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
+		return 0;
+	if(ar[idx] < ar[w_idx] && ar[idx] > ar[b_idx])
+		return dp[idx][b_idx][w_idx] = min(1+recur(b_idx,w_idx,idx+1), min(recur(idx,w_idx,idx+1), recur(b_idx,idx,idx+1)));
+	if(ar[idx] < ar[w_idx])
+		return dp[idx][b_idx][w_idx] = min(1+recur(b_idx,w_idx,idx+1), recur(b_idx,idx,idx+1));
+	if(ar[idx] > ar[b_idx])
+		return dp[idx][b_idx][w_idx] = min(1+recur(b_idx,w_idx,idx+1), recur(idx,w_idx,idx+1));
 	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
+		return dp[idx][b_idx][w_idx] = (1+recur(b_idx,w_idx,idx+1));
 }
 
 int main()
 {
-	test()
+	while(cin >> n)
 	{
-		cin >> tc >> n >> k;
+		if(n == -1)
+			return 0;
+		lpi(i,1,n)
+			cin >> ar[i];
 		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		ar[0] = 0, ar[n+1] = 1000005;
+		int ans = min(1+recur(0,n+1,2), min(recur(1,n+1,2), recur(0,1,2)));
+		cout << ans << endl;
 	}
 	return 0;
 }

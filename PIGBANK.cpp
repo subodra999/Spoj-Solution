@@ -34,42 +34,46 @@
 #define lpl(i,a,b) for(ll i=a;i<=b;++i)
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
-#define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
+#define test() int t; scanf("%d",&t); while(t--)
+
 
 using namespace std;
 typedef long long int ll;
+const int N =(int) 1e4+4;
 
-int n,k,tc;
-int dp[105][105][105];
-
-int recur(int one,int cnt,int idx)
-{
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
-	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
-	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
-}
+int dp[N];
 
 int main()
 {
 	test()
 	{
-		cin >> tc >> n >> k;
 		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		int n,e,f;
+		scanf("%d %d",&e,&f);
+		f -= e;
+		scanf("%d",&n);
+		int p[n],w[n];
+		lpi(i,0,n-1)
+		{
+			scanf("%d %d",&p[i],&w[i]);
+			//cin >> p[i] >> w[i];
+		}
+		dp[0] = 0;
+		lpi(i,1,f)
+		{
+			lpi(j,0,n-1)
+			{
+				if(i>=w[j] && dp[i-w[j]]!=-1 && (dp[i]==-1 || p[j]+dp[i-w[j]] < dp[i]))
+					dp[i] = p[j] + dp[i-w[j]];
+			}
+		}
+		if(dp[f]==-1) 
+			printf("This is impossible.\n");
+		
+		else 
+			printf("The minimum amount of money in the piggy-bank is %d.\n",dp[f]);
+		
+
 	}
 	return 0;
 }

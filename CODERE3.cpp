@@ -1,3 +1,4 @@
+#define speed ios::sync_with_stdio(false)
 #include<iostream>
 #include<cmath>
 #include<vector>
@@ -34,42 +35,50 @@
 #define lpl(i,a,b) for(ll i=a;i<=b;++i)
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
-#define speed ios::sync_with_stdio(false)
 #define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
+const int N = (int)1e5+5;
 
-int recur(int one,int cnt,int idx)
-{
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
-	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
-	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
-}
 
 int main()
 {
 	test()
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		int n;
+		cin >> n;
+		int ar[n];
+		lpi(i,0,n-1)
+			cin >> ar[i];
+		vii lis(n,1),lds(n,1);
+		lpi(i,1,n-1)
+		{
+			lpi(j,0,i-1)
+			{
+				if(ar[j]<ar[i])
+				{
+					lis[i] = max(lis[i],lis[j]+1);
+				}
+			}
+		}
+		lpir(i,n-2,0)
+		{
+			lpir(j,n-1,i+1)
+			{
+				if(ar[j]<ar[i])
+				{
+					lds[i] = max(lds[i],lds[j]+1);
+				}
+			}
+		}
+		int ans = 0;
+		lpi(i,0,n-1)
+		{
+			ans = max(ans, lis[i]+lds[i]-1);
+		}
+		cout << ans << endl;
 	}
 	return 0;
 }

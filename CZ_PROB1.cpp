@@ -35,41 +35,91 @@
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 #define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
 
-int recur(int one,int cnt,int idx)
+bool prime[7994];
+sii p,v;
+int dp[7994][4];
+void seive()
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
+	prime[0] = prime[1] = true;
+	for(int i=2;i*i<7994;++i)
 	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
+		if(!prime[i])
+		{
+			for(int j=2*i; j<7994; j+=i)
+			{
+				prime[j] = true;
+			}
+		}
 	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
+	for(int i=2;i<7994;++i)
+	{
+		if(!prime[i])
+			p.in(i);
+	}
 }
-
+bool square_num(int n)
+{
+	int p = (int)sqrt(n);
+	return p*p == n;
+}
+void init()
+{
+	int l = p.size();
+	for(int i=1;i<=90;++i)
+	{
+		tr(p,it)
+		{
+			if(*it < i*i)
+				continue;
+			bool check = square_num(*it - i*i);
+			if(check)
+				v.in(*it);
+		}
+	}
+}
+int count(int idx,int n)
+{
+    int i, j, x, y, m=4;
+    int s[] = {1,2,3,4};
+    int table[n+1][4];
+    for (i=0; i<m; i++)
+        table[0][i] = 1; 
+    for (i = 1; i < n+1; i++)
+    {
+        for (j = 0; j < m; j++)
+        {
+            x = (i-s[j] >= 0)? table[i - s[j]][j]: 0;
+            y = (j >= 1)? table[i][j-1]: 0;
+            table[i][j] = x + y;
+        }
+    }
+    lpi(i,0,3)
+    {
+    	dp[idx][i] = table[n][i];
+    }
+}
 int main()
 {
-	test()
+	int t,n,k;
+	cin >> t;
+	seive();
+	init();
+	int cnt=0;
+	tr(v,it)
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		count(cnt,*it);
+		cnt++;
 	}
+	while(t--)
+	{
+		cin >> n >> k;
+		cout << dp[n-1][k-1] << endl;
+	}
+	
 	return 0;
 }

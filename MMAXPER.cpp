@@ -35,41 +35,29 @@
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 #define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
-
-int n,k,tc;
-int dp[105][105][105];
-
-int recur(int one,int cnt,int idx)
+struct node
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
-	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
-	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
-}
-
+	int l,b;
+};
 int main()
 {
-	test()
+	int n;
+	cin >> n;
+	node ar[n];
+	lpi(i,0,n-1)
 	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
+		cin >> ar[i].l >> ar[i].b;
 	}
+	vector<vii > dp(n, vector<int>(2,0));
+	dp[0][0] = ar[0].l , dp[0][1] = ar[0].b;
+	lpi(i,1,n-1)
+	{
+		dp[i][0] = max(dp[i-1][0]+abs(ar[i].b-ar[i-1].b), dp[i-1][1]+abs(ar[i-1].l-ar[i].b))+ar[i].l;
+		dp[i][1] = max(dp[i-1][0]+abs(ar[i].l-ar[i-1].b), dp[i-1][1]+abs(ar[i-1].l-ar[i].l))+ar[i].b;
+	}
+	cout << max(dp[n-1][0], dp[n-1][1]) << endl;
 	return 0;
 }

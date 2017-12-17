@@ -35,41 +35,31 @@
 #define lplr(i,a,b) for(ll i=a;i>=b;--i)
 #define lpv(c,it) for(vii::iterator it=(c).begin();it!=(c).end();it++)
 #define speed ios::sync_with_stdio(false)
-#define test() int t; cin >> t; while(t--)
 
 using namespace std;
 typedef long long int ll;
 
-int n,k,tc;
-int dp[105][105][105];
+int n,ans,dp[5005][5005];
+string s;
 
-int recur(int one,int cnt,int idx)
+int recur(int l,int r)
 {
-	if(dp[one][cnt][idx] != -1)
-		return dp[one][cnt][idx];
-	if(idx > n)
-	{
-		if(cnt == k)
-			return 1;
-		else
-			return 0;
-	}
-	int a;
-	if(one+1 == idx)
-		a = recur(idx,cnt+1,idx+1);
-	else
-		a = recur(idx,cnt,idx+1);
-	return dp[one][cnt][idx] = a+recur(one,cnt,idx+1);
+	if(dp[l][r] != -1)
+		return dp[l][r];
+	if(l == r)
+		return 0;
+	if(l > r)
+		return 0;
+	if(s[l] == s[r])
+		return dp[l][r] = recur(l+1,r-1);
+	return dp[l][r] = min(recur(l,r-1) , recur(l+1,r))+1;
 }
-
 int main()
 {
-	test()
-	{
-		cin >> tc >> n >> k;
-		memset(dp,-1,sizeof(dp));
-		int ans = recur(1,0,2)+recur(0,0,2);
-		cout << tc << " " << ans << endl;
-	}
+	cin >> n;
+	cin >> s;
+	memset(dp,-1,sizeof(dp));
+	ans = recur(0,n-1);
+	cout << ans;
 	return 0;
 }
